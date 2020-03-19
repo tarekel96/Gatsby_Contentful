@@ -8,18 +8,11 @@ exports.createPages = async ({ graphql, actions }) => {
   const result = await graphql(
     `
       {
-        allMarkdownRemark(
-          sort: { fields: [frontmatter___date], order: DESC }
-          limit: 1000
-        ) {
+        allContentfulPost {
           edges {
             node {
-              fields {
-                slug
-              }
-              frontmatter {
-                title
-              }
+              title
+              slug
             }
           }
         }
@@ -32,17 +25,20 @@ exports.createPages = async ({ graphql, actions }) => {
   }
 
   // Create blog posts pages.
-  const posts = result.data.allMarkdownRemark.edges
+  const posts = result.data.allContentfulPost.edges
 
   posts.forEach((post, index) => {
     const previous = index === posts.length - 1 ? null : posts[index + 1].node
     const next = index === 0 ? null : posts[index - 1].node
 
     createPage({
-      path: post.node.fields.slug,
+      // path of a post --> edges/node/slug
+      // purpose of slug is to specifiy a blog post (so know which post is correct)
+      path: post.node.slug,
+      // blogPost represents the data object of a blog post
       component: blogPost,
       context: {
-        slug: post.node.fields.slug,
+        slug: post.node.slug,
         previous,
         next,
       },
@@ -62,3 +58,23 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     })
   }
 }
+
+// `
+//   {
+//     allMarkdownRemark(
+//       sort: { fields: [frontmatter___date], order: DESC }
+//       limit: 1000
+//     ) {
+//       edges {
+//         node {
+//           fields {
+//             slug
+//           }
+//           frontmatter {
+//             title
+//           }
+//         }
+//       }
+//     }
+//   }
+// `

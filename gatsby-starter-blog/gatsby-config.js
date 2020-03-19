@@ -1,6 +1,6 @@
-require("dotenv").config()
-console.log(process.env.spaceId)
-console.log(process.env.accessToken)
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
 module.exports = {
   siteMetadata: {
     title: `Gatsby Starter Blog`,
