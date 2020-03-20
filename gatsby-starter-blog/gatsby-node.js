@@ -35,7 +35,7 @@ exports.createPages = async ({ graphql, actions }) => {
       // path of a post --> edges/node/slug
       // purpose of slug is to specifiy a blog post (so know which post is correct)
       path: post.node.slug,
-      // blogPost represents the data object of a blog post
+      // blogPost represents the front end React.js file that accepts the query request
       component: blogPost,
       context: {
         slug: post.node.slug,
